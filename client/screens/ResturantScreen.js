@@ -49,9 +49,9 @@ export default function ResturantScreen() {
   return (
     <>
         <BasketIcon />
-        <ScrollView  >
+        <ScrollView  style={{}}>
             <View className="relative">
-                <Image className="w-full h-72" source={{uri: urlFor(imgUrl).url()}} />
+                <Image className="w-full" style={{height: 400,}} source={{uri: urlFor(imgUrl).url()}} />
                 <TouchableOpacity 
                     onPress={()=>navigation.goBack()} 
                     className="absolute top-14 left-4 bg-gray-50 p-2 rounded-full shadow">

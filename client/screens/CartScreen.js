@@ -27,7 +27,6 @@ export default function BasketScreen() {
             return group;
           },{})
         setGroupedItems(gItems);
-        // console.log('items: ',gItems);
        
     }, [basketItems])
     
@@ -43,7 +42,7 @@ export default function BasketScreen() {
         </TouchableOpacity>
         <View>
             <Text className="text-center font-bold text-xl">Giỏ hàng</Text>
-            <Text className="text-center text-gray-500">{resturant.title}</Text>
+            <Text className="text-center text-gray-800">{resturant.title}</Text>
         </View>
         
       </View>
@@ -72,9 +71,9 @@ export default function BasketScreen() {
                         <View key={key} 
                         className="flex-row items-center space-x-3 py-2 px-4 bg-white rounded-3xl mx-2 mb-3 shadow-md">
                             <Text style={{color: themeColors.text}} className="font-bold">{items.length} x </Text>
-                            <Image className="h-14 w-14 rounded-full" source={{uri: urlFor(items[0]?.image).url()}} />
+                            <Image className="h-20 w-20 rounded-lg" source={{uri: urlFor(items[0]?.image).url()}} />
                             <Text className="flex-1 font-bold text-gray-700">{items[0]?.name}</Text>
-                            <Text className="font-semibold text-base">{items[0]?.price}</Text>
+                            <Text className="font-semibold text-base">{items[0]?.price * items.length}</Text>
                             <TouchableOpacity 
                                 className="p-1 rounded-full" 
                                 style={{backgroundColor: themeColors.bgColor(1)}} 

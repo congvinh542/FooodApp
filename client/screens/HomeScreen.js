@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { SafeAreaView, ScrollView, StatusBar, Text, TextInput, View } from 'react-native'
+import { SafeAreaView, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import * as Icon from "react-native-feather"
 import { getFeaturedResturants } from '../api'
 import Categories from '../components/categories'
@@ -34,9 +34,11 @@ export default function HomeScreen() {
                     <Text className="text-gray-600">Nha Trang</Text>
                 </View>
             </View>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <View style={{backgroundColor: 'gray'}} className="p-3 rounded-full">
-                <Icon.User height={20} width={20} strokeWidth="2.5" stroke="white" />
+                <Icon.User height={23} width={23} strokeWidth="2.5" stroke="white" />
             </View>
+            </TouchableOpacity>
         </View>
 
          

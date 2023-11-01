@@ -29,5 +29,6 @@ const pallete = [
 
 ]
 export const themeColors = {
-    ...pallete[0]
-}
+    ...pallete[0],
+   bg: '#877dfa',
+}   
