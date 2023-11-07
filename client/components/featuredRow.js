@@ -12,10 +12,8 @@ export default function FeatureRow({id, title, description}) {
   useEffect(() => {
      getFeaturedResturantById(id).then(data=>{
        setResturants(data?.restaurants);
-      //  console.log('got data: ',data);
      })
   }, [id])
-  //  console.log(resturants);
   
   return (
     <View>
