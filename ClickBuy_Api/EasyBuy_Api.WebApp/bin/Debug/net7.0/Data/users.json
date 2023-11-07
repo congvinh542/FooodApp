@@ -1,0 +1,52 @@
+[
+  {
+    "Id": 1,
+    "Username": "admin",
+    "Password": "admin",
+    "Role": "admin",
+    "BankName": "MB-Bank",
+    "BankNumber": "0963562615",
+    "Balance": "50000000",
+    "Orders": null
+  },
+  {
+    "Id": 2,
+    "Username": "mod",
+    "Password": "mod",
+    "Role": "mod",
+    "BankName": "Agribank",
+    "BankNumber": "0963562615",
+    "Balance": "100000",
+    "Orders": null
+  },
+  {
+    "Id": 3,
+    "Username": "vinh",
+    "Password": "test",
+    "Role": "Admin",
+    "BankName": null,
+    "BankNumber": null,
+    "Balance": null,
+    "Orders": null
+  },
+  {
+    "Id": 4,
+    "Username": "teadsa",
+    "Password": "asdadsa",
+    "Role": "Admin",
+    "BankName": null,
+    "BankNumber": null,
+    "Balance": null,
+    "Orders": null
+  },
+  {
+    "Id": 5,
+    "Username": "admin",
+    "Password": "admin121",
+    "Role": "Admin",
+    "BankName": null,
+    "BankNumber": null,
+    "Balance": null,
+    "Orders": null
+  }
+]

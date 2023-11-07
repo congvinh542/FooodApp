@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\ClickBuy_Api.WebApp.props" />
+</Project>

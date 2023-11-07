@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\ClickBuy_Api.WebApp.props" />
+</Project>

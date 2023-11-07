@@ -1,0 +1,20 @@
+[
+  {
+    "Id": 1,
+    "Name": "Agribank",
+    "BankNumber": "0123456789",
+    "Balance": 49324000.0
+  },
+  {
+    "Id": 2,
+    "Name": "MB-Bank",
+    "BankNumber": "1234567890",
+    "Balance": 49035000.0
+  },
+  {
+    "Id": 3,
+    "Name": "VietComBank",
+    "BankNumber": "234567890",
+    "Balance": 49573000.0
+  }
+]

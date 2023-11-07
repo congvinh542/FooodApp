@@ -1,0 +1,20 @@
+[
+  {
+    "FirstName": "System",
+    "LastName": "Admin",
+    "UserName": "admin",
+    "Email": "dangcongvinh328@gmail.com"
+  },
+  {
+    "FirstName": "System",
+    "LastName": "Mod",
+    "UserName": "mod",
+    "Email": "mod@hmz.com"
+  },
+  {
+    "FirstName": "System",
+    "LastName": "Member",
+    "UserName": "member",
+    "Email": "member@hmz.com"
+  }
+]

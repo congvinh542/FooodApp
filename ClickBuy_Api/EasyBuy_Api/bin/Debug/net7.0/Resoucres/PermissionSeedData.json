@@ -1,0 +1,42 @@
+[
+    {
+        "Key": "ReadPermission",
+        "Value": "READ",
+        "Description": "Read Permission"
+    },
+    {
+        "Key": "WritePermission",
+        "Value": "WRITE",
+        "Description": "Write Permission"
+    },
+    {
+        "Key": "UserRead",
+        "Value": "READ",
+        "Description": "User Read"
+    },
+    {
+        "Key": "UserWrite",
+        "Value": "WRITE",
+        "Description": "User Write"
+    },
+    {
+        "Key": "RoleRead",
+        "Value": "READ",
+        "Description": "Role Read"
+    },
+    {
+        "Key": "RoleWrite",
+        "Value": "WRITE",
+        "Description": "Role Write"
+    },
+    {
+        "Key": "NotificationRead",
+        "Value": "READ",
+        "Description": "Notification Read"
+    },
+    {
+        "Key": "NotificationWrite",
+        "Value": "WRITE",
+        "Description": "Notification Write"
+    }
+]
