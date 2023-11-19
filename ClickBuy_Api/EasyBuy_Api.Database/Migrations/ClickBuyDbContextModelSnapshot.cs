@@ -496,6 +496,12 @@ namespace ClickBuy_Api.Database.Migrations
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Review")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TimeShip")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 

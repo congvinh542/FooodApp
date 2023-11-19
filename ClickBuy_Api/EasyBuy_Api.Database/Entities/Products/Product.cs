@@ -12,6 +12,8 @@ namespace ClickBuy_Api.Database.Entities.Products
     {
         public decimal Price { get; set; } = 0;
         public int? Quantity { get; set; }
+        public int? Review { get; set; }
+        public String? TimeShip { get; set; }
         public Boolean? IsHot { get; set; } = false;
 
         public Guid? CategoryId { get; set; }

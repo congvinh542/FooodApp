@@ -27,7 +27,7 @@ namespace ClickBuy_Api.Service.Extensions
                 opt.Password.RequireDigit = true;
 
 
-                opt.Lockout.DefaultLockoutTimeSpan= TimeSpan.FromMinutes(5);
+                opt.Lockout.DefaultLockoutTimeSpan= TimeSpan.FromMinutes(50);
                 opt.Lockout.MaxFailedAccessAttempts = 5;
                 opt.Lockout.AllowedForNewUsers = true;
                 
@@ -58,7 +58,7 @@ namespace ClickBuy_Api.Service.Extensions
                 options.LogoutPath = "/Auth/Logout";
                 options.AccessDeniedPath = "/Auth/Login";
                 options.SlidingExpiration = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
             })
 
             .AddJwtBearer(options =>

@@ -16,7 +16,7 @@ export default function BasketScreen() {
 
     const dispatch = useDispatch();
     const navigation = useNavigation();
-    const deliveryFee = 2;
+    const deliveryFee = 'Miễn phí';
     useMemo(() => {
         const gItems = basketItems.reduce((group, item)=>{
             if(group[item.id]){

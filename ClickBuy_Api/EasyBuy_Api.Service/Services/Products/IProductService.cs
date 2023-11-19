@@ -9,6 +9,7 @@ namespace ClickBuy_Api.Service.Services.Products
     public interface IProductService : IBaseService<ProductQuery, ProductView, ProductFilter>
     {
         Task<DataResult<ProductView>> GetByCodeAsync(string code);
+        Task<DataResult<List<ProductView>>> GetProductsByCategory(string id);
         Task<DataResult<ProductView>> GetAll();
         Task<DataResult<ProductView>> GetDrinksAsync();
         Task<DataResult<ProductView>> GetBestSellersAsync();

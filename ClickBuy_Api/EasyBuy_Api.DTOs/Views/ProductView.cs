@@ -8,6 +8,7 @@ namespace ClickBuy_Api.DTOs.Views
         public int? Quantity { get; set; }
         public String? pathImage { get; set; }
         public String? CodeCategory { get; set; }
+        public String? NameCategory { get; set; }
 
         // Foreign key
         public String? ImageId { get; set; }

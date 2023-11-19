@@ -11,6 +11,7 @@ using ClickBuy_Api.Service.Validator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ClickBuy_Api.Service.Services.Products
 {
@@ -129,36 +130,124 @@ namespace ClickBuy_Api.Service.Services.Products
             return result;
         }
 
+        public async Task<DataResult<List<ProductView>>> GetProductsByCategory(string id)
+        {
+            var result = new DataResult<List<ProductView>>();
+            var products = await _unitOfWork.GetRepository<Product>()
+                .AsQueryable()
+                .Include(x => x.Images)
+                .Include(x => x.Categorys)
+                .Where(x => x.CategoryId == Guid.Parse(id))
+                .ToListAsync();
+
+            if (products == null || !products.Any())
+            {
+                result.Errors.Add("No products found for the given category");
+                return result;
+            }
+
+            result.Entity = products.Select(product => new ProductView
+            {
+                Id = product.Id,
+                Code = product.Code,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Quantity = product.Quantity,
+                ImageId = product.ImageId.ToString(),
+                CategoryId = product.CategoryId.ToString(),
+                pathImage = _unitOfWork.GetRepository<ClickBuy_Api.Database.Entities.Catalog.Images>().AsQueryable()
+                                      .Where(image => image.Id == product.ImageId)
+                                      .Select(image => image.FilePath)
+                                      .FirstOrDefault(),
+                NameCategory = _unitOfWork.GetRepository<ClickBuy_Api.Database.Entities.Catalog.Category>().AsQueryable()
+                                      .Where(name => name.Id == product.CategoryId)
+                                      .Select(name => name.Name)
+                                      .FirstOrDefault(),
+                CreatedBy = product.CreatedBy,
+                CreatedAt = product.CreatedAt,
+                UpdatedAt = product.UpdatedAt,
+                IsActive = product.IsActive,
+            }).ToList();
+
+            return result;
+        }
+
+
         public async Task<DataResult<ProductView>> GetPageList(BaseFilter<ProductFilter> query)
         {
-            var products = await _unitOfWork.GetRepository<Product>().AsQueryable()
-                     .Include(x => x.Images)
-                     .Skip((query.PageNumber.Value - 1) * query.PageSize.Value)
-                     .Take(query.PageSize.Value)
-                     .Select(x => new ProductView()
-                     {
-                         Id = x.Id,
-                         Name = x.Name,
-                         Code = x.Code,
-                         Description = x.Description,
-                         Price = x.Price,
-                         Quantity = x.Quantity,
-                         CategoryId = x.CategoryId.ToString(),
-                         ImageId = x.ImageId.ToString(),
-                         pathImage = x.Images.FilePath,
-                         CreatedBy = x.CreatedBy,
-                         CreatedAt = x.CreatedAt,
-                         UpdatedAt = x.UpdatedAt,
-                         IsActive = x.IsActive,
-                     })
-                     .ApplyFilter(query)
-                     .OrderByColums(query.SortColums, true).ToListAsync();
+            // Kiểm tra xem có điều kiện lọc theo categoryId không
+            if (query.Entity != null && query.Entity.CategoryId != null)
+            {
+                var categoryId = query.Entity.CategoryId; // Lấy categoryId từ query.Entity
 
-            var response = new DataResult<ProductView>();
-            response.TotalRecords = await _unitOfWork.GetRepository<Product>().AsQueryable().CountAsync();
-            response.Items = products;
-            return response;
+                var products = await _unitOfWork.GetRepository<Product>().AsQueryable()
+                    .Include(x => x.Images)
+                    .Include(x => x.Categorys)
+                   
+                    .Skip((query.PageNumber.Value - 1) * query.PageSize.Value)
+                    .Take(query.PageSize.Value)
+                    .Select(x => new ProductView()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Code = x.Code,
+                        Description = x.Description,
+                        Price = x.Price,
+                        Quantity = x.Quantity,
+                        CategoryId = x.CategoryId.ToString(),
+                        NameCategory = x.Categorys.Name,
+                        ImageId = x.ImageId.ToString(),
+                        pathImage = x.Images.FilePath,
+                        CreatedBy = x.CreatedBy,
+                        CreatedAt = x.CreatedAt,
+                        UpdatedAt = x.UpdatedAt,
+                        IsActive = x.IsActive,
+                    })
+                    .ApplyFilter(query)
+                    .OrderByColums(query.SortColums, true).ToListAsync();
+
+                var response = new DataResult<ProductView>();
+         
+
+                response.TotalRecords = await _unitOfWork.GetRepository<Product>().AsQueryable().CountAsync();
+                response.Items = products;
+
+                return response;
+            }
+            else
+            {
+                // Nếu không có điều kiện lọc, bạn có thể giữ nguyên phần cũ
+                var products = await _unitOfWork.GetRepository<Product>().AsQueryable()
+                    .Include(x => x.Categorys)
+                    .Skip((query.PageNumber.Value - 1) * query.PageSize.Value)
+                    .Take(query.PageSize.Value)
+                    .Select(x => new ProductView()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Code = x.Code,
+                        Description = x.Description,
+                        Price = x.Price,
+                        Quantity = x.Quantity,
+                        CategoryId = x.CategoryId.ToString(),
+                        ImageId = x.ImageId.ToString(),
+                        pathImage = x.Images.FilePath,
+                        CreatedBy = x.CreatedBy,
+                        CreatedAt = x.CreatedAt,
+                        UpdatedAt = x.UpdatedAt,
+                        IsActive = x.IsActive,
+                    })
+                    .ApplyFilter(query)
+                    .OrderByColums(query.SortColums, true).ToListAsync();
+
+                var response = new DataResult<ProductView>();
+                response.Items = products;
+
+                return response;
+            }
         }
+
 
         public async Task<DataResult<int>> UpdateAsync(ProductQuery entity, string id)
         {
@@ -199,6 +288,7 @@ namespace ClickBuy_Api.Service.Services.Products
         {
             var product = await _unitOfWork.GetRepository<Product>().AsQueryable()
                       .Include(x => x.Images)
+                      
                       .Select(x => new ProductView()
                       {
                           Id = x.Id,
@@ -236,6 +326,7 @@ namespace ClickBuy_Api.Service.Services.Products
                              CategoryId = x.CategoryId.ToString(),
                              pathImage = x.Images.FilePath,
                              CodeCategory = x.Categorys.Code,
+                             NameCategory = x.Categorys.Name,
                          })
                          .ToListAsync();
 

@@ -11,7 +11,6 @@ namespace ClickBuy_Api.WebAdmin.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    [Authorize]
     public class ProductController : BaseController<IProductService>
     {
         private readonly IimageService _imageService;
@@ -38,13 +37,15 @@ namespace ClickBuy_Api.WebAdmin.Controllers
         {
             query.PageNumber = query.PageNumber > 0 ? query.PageNumber : 1;
             query.PageSize = query.PageSize > 0 ? query.PageSize : 10;
-            var tinhs = await _service.GetPageList(query);
-            var response = new
-            {
-                TotalRecords = tinhs.TotalRecords,
-                Items = tinhs.Items
-            };
-            return Ok(response);
+            var products = await _service.GetPageList(query);
+            return Ok(products);
+        }
+
+        [HttpGet("ProductByCategory")]
+        public async Task<IActionResult> GetByProductByCategory(string categoryId)
+        {
+            var result = await _service.GetProductsByCategory(categoryId);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
