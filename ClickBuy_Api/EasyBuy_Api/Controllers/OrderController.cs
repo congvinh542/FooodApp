@@ -10,7 +10,6 @@ namespace ClickBuy_Api.WebAdmin.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    [Authorize]
     public class OrderController : BaseController<IOrderService>
     {
         public OrderController(IOrderService service) : base(service)
@@ -31,6 +30,13 @@ namespace ClickBuy_Api.WebAdmin.Controllers
                 Items = tinhs.Items
             };
             return Ok(response);
+        }
+
+        [HttpGet("GetOrderByUserId/{id}")]
+        public async Task<IActionResult> GetOrderByUserId(string id)
+        {
+            var result = await _service.GetOrderByUserId(id);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]

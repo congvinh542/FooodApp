@@ -13,8 +13,7 @@ namespace ClickBuy_Api.Database.Entities.Products
         public Guid? ProductId { get; set; }
         public Product? Product { get; set; }   
 
-        public Guid OrderId { get; set; } // Khóa ngoại đến lớp Order
-        public Order Order { get; set; }
+
 
         public int Quantity { get; set; }
         public decimal PricePerUnit { get; set; }

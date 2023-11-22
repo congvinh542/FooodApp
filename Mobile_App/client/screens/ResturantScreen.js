@@ -74,14 +74,8 @@ export default function ResturantScreen() {
                                 <Text className="text-gray-700"> (4.6k review)</Text> · <Text className="font-semibold text-gray-700">{type}</Text>
                             </Text>
                         </View>
-                        <View className="flex-row items-center space-x-1">
-                            <Icon.MapPin color="gray" width={15} height={15} />
-                            <Text className="text-gray-800 text-xs"> Nearby · {address}</Text>
-                        </View>
                     </View>
                     <Text className="text-gray-500 mt-2">{description}</Text>
-                    
-                    
                 </View>
                 
             </View>

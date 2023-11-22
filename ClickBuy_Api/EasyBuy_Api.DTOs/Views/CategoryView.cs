@@ -7,5 +7,7 @@ namespace ClickBuy_Api.DTOs.Views
         public Guid? ParentCategoryId { set; get; }
         public Guid? ImageId { set; get; }
         public String? PathImage { set; get; }
+        public String? PathCategory { set; get; }
+        public String? NameCategory { set; get; }
     }
 }

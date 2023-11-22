@@ -322,7 +322,13 @@ namespace ClickBuy_Api.Database.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("TotalAmount")
+                    b.Property<string>("PathImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Quantity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -331,7 +337,7 @@ namespace ClickBuy_Api.Database.Migrations
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -421,9 +427,6 @@ namespace ClickBuy_Api.Database.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<decimal>("PricePerUnit")
                         .HasColumnType("decimal(18,2)");
 
@@ -440,8 +443,6 @@ namespace ClickBuy_Api.Database.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
@@ -874,25 +875,16 @@ namespace ClickBuy_Api.Database.Migrations
                     b.HasOne("ClickBuy_Api.Database.Entities.System.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClickBuy_Api.Database.Entities.Products.OrderDetail", b =>
                 {
-                    b.HasOne("ClickBuy_Api.Database.Entities.Order", "Order")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ClickBuy_Api.Database.Entities.Products.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
-
-                    b.Navigation("Order");
 
                     b.Navigation("Product");
                 });
@@ -1051,11 +1043,6 @@ namespace ClickBuy_Api.Database.Migrations
             modelBuilder.Entity("ClickBuy_Api.Database.Entities.Gender", b =>
                 {
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("ClickBuy_Api.Database.Entities.Order", b =>
-                {
-                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("ClickBuy_Api.Database.Entities.Permission", b =>

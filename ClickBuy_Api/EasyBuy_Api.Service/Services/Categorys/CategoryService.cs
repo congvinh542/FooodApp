@@ -90,8 +90,11 @@ namespace ClickBuy_Api.Service.Services.Categorys
                 Code = category.Code,
                 Name = category.Name,
                 ImageId = category.ImageId,
+                PathImage = _unitOfWork.GetRepository<ClickBuy_Api.Database.Entities.Catalog.Images>().AsQueryable()
+                                      .Where(image => image.Id == category.ImageId)
+                                      .Select(image => image.FilePath) // Lấy đường dẫn hình ảnh từ ImageId
+                                      .FirstOrDefault(),
                 Description = category.Description,
-
                 CreatedBy = category.CreatedBy,
                 CreatedAt = category.CreatedAt,
                 UpdatedAt = category.UpdatedAt,

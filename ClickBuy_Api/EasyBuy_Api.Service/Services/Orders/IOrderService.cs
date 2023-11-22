@@ -10,5 +10,7 @@ namespace ClickBuy_Api.Service.Services.Orders
     {
         Task<DataResult<OrderView>> GetByCodeAsync(string code);
         Task<DataResult<OrderView>> GetAll();
+        Task<DataResult<List<OrderView>>> GetOrderByUserId(string id);
+
     }
 }

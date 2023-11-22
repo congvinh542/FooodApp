@@ -92,7 +92,7 @@ namespace ClickBuy_Api.Service.Services.Products
 
                 ImageId = product.ImageId.ToString(),
                 CategoryId = product.CategoryId.ToString(),
-                pathImage = product.Images.FilePath,
+                PathImage = product.Images.FilePath,
             };
             return result;
         }
@@ -120,7 +120,7 @@ namespace ClickBuy_Api.Service.Services.Products
                 Quantity = product.Quantity,
                 ImageId = product.ImageId.ToString(),
                 CategoryId = product.CategoryId.ToString(),
-                pathImage = product.Images?.FilePath,
+                PathImage = product.Images?.FilePath,
 
                 CreatedBy = product.CreatedBy,
                 CreatedAt = product.CreatedAt,
@@ -156,8 +156,12 @@ namespace ClickBuy_Api.Service.Services.Products
                 Quantity = product.Quantity,
                 ImageId = product.ImageId.ToString(),
                 CategoryId = product.CategoryId.ToString(),
-                pathImage = _unitOfWork.GetRepository<ClickBuy_Api.Database.Entities.Catalog.Images>().AsQueryable()
+                PathImage = _unitOfWork.GetRepository<ClickBuy_Api.Database.Entities.Catalog.Images>().AsQueryable()
                                       .Where(image => image.Id == product.ImageId)
+                                      .Select(image => image.FilePath)
+                                      .FirstOrDefault(),
+                PathCategory = _unitOfWork.GetRepository<ClickBuy_Api.Database.Entities.Catalog.Images>().AsQueryable()
+                                      .Where(image => image.Id == product.Categorys.ImageId)
                                       .Select(image => image.FilePath)
                                       .FirstOrDefault(),
                 NameCategory = _unitOfWork.GetRepository<ClickBuy_Api.Database.Entities.Catalog.Category>().AsQueryable()
@@ -198,7 +202,7 @@ namespace ClickBuy_Api.Service.Services.Products
                         CategoryId = x.CategoryId.ToString(),
                         NameCategory = x.Categorys.Name,
                         ImageId = x.ImageId.ToString(),
-                        pathImage = x.Images.FilePath,
+                        PathImage = x.Images.FilePath,
                         CreatedBy = x.CreatedBy,
                         CreatedAt = x.CreatedAt,
                         UpdatedAt = x.UpdatedAt,
@@ -232,7 +236,7 @@ namespace ClickBuy_Api.Service.Services.Products
                         Quantity = x.Quantity,
                         CategoryId = x.CategoryId.ToString(),
                         ImageId = x.ImageId.ToString(),
-                        pathImage = x.Images.FilePath,
+                        PathImage = x.Images.FilePath,
                         CreatedBy = x.CreatedBy,
                         CreatedAt = x.CreatedAt,
                         UpdatedAt = x.UpdatedAt,
@@ -297,7 +301,7 @@ namespace ClickBuy_Api.Service.Services.Products
                           Price = x.Price,
                           Quantity = x.Quantity,
                           ImageId = x.ImageId.ToString(),
-                          pathImage = x.Images.FilePath,
+                          PathImage = x.Images.FilePath,
                           CategoryId = x.CategoryId.ToString(),
 
                           CreatedBy = x.CreatedBy,
@@ -324,7 +328,7 @@ namespace ClickBuy_Api.Service.Services.Products
                              Quantity = x.Quantity,
                              ImageId = x.ImageId.ToString(),
                              CategoryId = x.CategoryId.ToString(),
-                             pathImage = x.Images.FilePath,
+                             PathImage = x.Images.FilePath,
                              CodeCategory = x.Categorys.Code,
                              NameCategory = x.Categorys.Name,
                          })
@@ -349,7 +353,7 @@ namespace ClickBuy_Api.Service.Services.Products
                                   Quantity = x.Quantity,
                                   CategoryId = x.CategoryId.ToString(),
                                   ImageId = x.ImageId.ToString(),
-                                  pathImage = x.Images.FilePath,
+                                  PathImage = x.Images.FilePath,
                                   CodeCategory = x.Categorys.Code,
                               })
                               .ToListAsync();

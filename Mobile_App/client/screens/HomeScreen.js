@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { SafeAreaView, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import * as Icon from "react-native-feather"
@@ -10,6 +10,17 @@ export default function HomeScreen() {
 
     const [featuredCategories, setFeaturedCategories] = useState([])
     const navigation = useNavigation();
+    const route = useRoute();
+    const { isLoggedIn, userId } = route.params || {};
+
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            // Xử lý khi đăng nhập thành công, có thể làm gì đó với userData
+           // console.log('User data:', userData);
+        }
+    }, [isLoggedIn, userId]);
+
     useLayoutEffect(() => {
       navigation.setOptions({headerShown: false})
     }, [])
@@ -19,6 +30,13 @@ export default function HomeScreen() {
         })
     },[])
 
+    const handleIconPress = () => {
+        if (isLoggedIn) {
+            navigation.navigate('OrderList', { userId: userId });
+        } else {
+            navigation.navigate('Login');
+        }
+    };
   return (
     <SafeAreaView className="bg-white pt-3 flex-1">
     <StatusBar
@@ -34,14 +52,16 @@ export default function HomeScreen() {
                     <Text className="text-gray-600">Nha Trang</Text>
                 </View>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <View style={{backgroundColor: 'gray'}} className="p-3 rounded-full">
-                <Icon.User height={23} width={23} strokeWidth="2.5" stroke="white" />
-            </View>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={handleIconPress}>
+                  <View style={{ backgroundColor: 'gray', padding: 12, borderRadius: 30 }}>
+                      {isLoggedIn ? (
+                          <Icon.User height={23} width={23} strokeWidth={2.5} stroke="white" />
+                      ) : (
+                          <Icon.Menu height={23} width={23} strokeWidth={2.5} stroke="white" />
+                      )}
+                  </View>
+              </TouchableOpacity>
         </View>
-
-         
 
     {/* main */}
     <ScrollView

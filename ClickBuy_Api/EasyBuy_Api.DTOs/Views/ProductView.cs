@@ -6,7 +6,8 @@ namespace ClickBuy_Api.DTOs.Views
     {
         public decimal Price { get; set; }
         public int? Quantity { get; set; }
-        public String? pathImage { get; set; }
+        public String? PathImage { get; set; }
+        public String? PathCategory { get; set; }
         public String? CodeCategory { get; set; }
         public String? NameCategory { get; set; }
 

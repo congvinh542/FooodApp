@@ -11,7 +11,7 @@ export default function Categories() {
     const getListCategories = async () => {
       try {
         const response = await fetch(
-          'https://7f72-14-191-242-235.ngrok-free.app/api/Category',
+          'https://47d5-14-191-242-235.ngrok-free.app/api/Category',
           {
             method: 'GET',
           }
@@ -26,13 +26,33 @@ export default function Categories() {
         console.log('Error fetching categories:', error);
       }
     };
+    
 
     getListCategories();
   }, []);
 
-  const handleCategoryPress = (categoryId) => {
+  
+
+  const handleCategoryPress = async (categoryId) => {
     setActiveCategory(categoryId);
-    navigation.navigate('ProductList', { categoryId }); // Chuyển ID danh mục sang màn hình ProductList
+    navigation.navigate('ProductList', { categoryId });
+
+    try {
+      const response = await fetch(
+        `https://47d5-14-191-242-235.ngrok-free.app/api/Category/${categoryId}`,
+        {
+          method: 'GET',
+        }
+      );
+      const data = await response.json();
+      if (data && data.entity) {
+        navigation.navigate('ProductList', { categoryId, resturantData: data.entity });
+      } else {
+        console.log('Invalid category data format:', data);
+      }
+    } catch (error) {
+      console.log('Error fetching category data:', error);
+    }
   };
 
   return (

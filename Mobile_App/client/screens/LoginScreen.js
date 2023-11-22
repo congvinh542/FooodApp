@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
   Image,
@@ -7,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import * as Icon from "react-native-feather";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { themeColors } from "../theme";
@@ -16,17 +16,40 @@ export default function LoginScreen() {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (email !== "" && password !== "") {
-      // Xử lý đăng nhập thành công, chuyển hướng đến trang chủ
-      navigation.navigate("Home"); // Thay 'Home' bằng tên màn hình trang chủ của bạn
+      try {
+        const response = await fetch('https://47d5-14-191-242-235.ngrok-free.app/api/Users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+            rememberMe : true
+          }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          setIsLoggedIn(true);
+
+          navigation.navigate('Home', { isLoggedIn: true, userId: result.id });
+        } else {
+          const errorResult = await response.json();
+          Alert.alert('Đăng nhập thất bại', errorResult.message);
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        Alert.alert('Đã xảy ra lỗi', 'Vui lòng thử lại sau.');
+      }
     } else {
-      // Hiển thị thông báo lỗi hoặc xử lý đăng nhập không thành công
-      // Ví dụ: Alert.alert('Thông báo', 'Vui lòng nhập đầy đủ thông tin đăng nhập.');
+      Alert.alert('Thông báo', 'Sai tài khoảng hoặc mật khẩu.');
     }
   };
-
   return (
     <View
       className="flex-1 bg-white"
@@ -58,7 +81,7 @@ export default function LoginScreen() {
           <Text className="text-gray-700 ml-4">Email</Text>
           <TextInput
             className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
-            placeholder="Email@"
+            placeholder="Email"
             value={email}
             onChangeText={(text) => setEmail(text)}
           />

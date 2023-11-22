@@ -1,4 +1,5 @@
-﻿using ClickBuy_Api.Database.Entities;
+﻿using ClickBuy_Api.Database.Common;
+using ClickBuy_Api.Database.Entities;
 using ClickBuy_Api.Database.Entities.Products;
 using ClickBuy_Api.DTOs.Fillters;
 using ClickBuy_Api.DTOs.Queries;
@@ -37,30 +38,36 @@ namespace ClickBuy_Api.Service.Services.Orders
         {
             var result = new DataResult<bool>();
 
-            var order = new Order
+            try
             {
-                Name = entity.Name,
-                Code = entity.Code,
-                Description = entity.Description,
-                UserId = new Guid("832E7728-9B34-4E9C-8E2E-08DBDE912307"), // Gán ID của người dùng đặt hàng vào đơn hàng
-                OrderDate = DateTime.Now, // Ngày đặt hàng
-            };
+                var order = new Order
+                {
+                    Name = entity.Name,
+                    Code = HelperCommon.GenerateCode(8, "#"),
+                    TotalAmount = decimal.Parse(entity.TotalAmount),
+                    PathImage = entity.PathImage,
+                    Quantity = entity.Quantity,
+                    UserId = new Guid("A21D05FD-801A-4AA6-526D-08DBEB372DB8"), // Gán ID của người dùng đặt hàng vào đơn hàng
+                    OrderDate = DateTime.Now, // Ngày đặt hàng
+                };
 
-            // Thêm chi tiết đơn hàng
-   
-            
+                await _unitOfWork.GetRepository<Order>().Add(order);
+                result.Entity = await _unitOfWork.SaveChangesAsync() > 0;
 
-            await _unitOfWork.GetRepository<Order>().Add(order);
-            result.Entity = await _unitOfWork.SaveChangesAsync() > 0;
-
-            if (result.Entity == false)
+                if (!result.Entity)
+                {
+                    result.Errors.Add("Error while saving.");
+                }
+            }
+            catch (Exception ex)
             {
-                result.Errors.Add("Error while saving.");
-                return result;
+                // Log the exception here
+                result.Errors.Add($"Error during data insertion: {ex.Message}");
             }
 
             return result;
         }
+
 
         public async Task<DataResult<int>> DeleteAsync(string id)
         {
@@ -114,6 +121,7 @@ namespace ClickBuy_Api.Service.Services.Orders
                 Name = Order.Name,
                 Description = Order.Description,
 
+
                 CreatedBy = Order.CreatedBy,
                 CreatedAt = Order.CreatedAt,
                 UpdatedAt = Order.UpdatedAt,
@@ -132,8 +140,12 @@ namespace ClickBuy_Api.Service.Services.Orders
                          Id = x.Id,
                          Name = x.Name,
                          Code = x.Code,
+                         UserId = x.UserId.ToString(),
                          Description = x.Description,
-
+                         UserName = _unitOfWork.GetRepository<ClickBuy_Api.Database.Entities.System.User>().AsQueryable()
+                                      .Where(name => name.Id == x.UserId)
+                                      .Select(name => name.FirstName)
+                                      .FirstOrDefault(),
                          CreatedBy = x.CreatedBy,
                          CreatedAt = x.CreatedAt,
                          UpdatedAt = x.UpdatedAt,
@@ -146,6 +158,45 @@ namespace ClickBuy_Api.Service.Services.Orders
             response.TotalRecords = await _unitOfWork.GetRepository<Order>().AsQueryable().CountAsync();
             response.Items = Orders;
             return response;
+        }
+
+        public async Task<DataResult<List<OrderView>>> GetOrderByUserId(string id)
+        {
+            var result = new DataResult<List<OrderView>>();
+            var orders = await _unitOfWork.GetRepository<Order>()
+                .AsQueryable()
+                .Include(x => x.User)
+                .Where(x => x.UserId == Guid.Parse(id))
+                .ToListAsync();
+
+            if (orders == null || !orders.Any())
+            {
+                result.Errors.Add("No orders found for the given category");
+                return result;
+            }
+
+            result.Entity = orders.Select(order => new OrderView
+            {
+                Id = order.Id,
+                Code = order.Code,
+                Name = order.Name,
+                UserId = order.UserId.ToString(),
+                UserName = _unitOfWork.GetRepository<ClickBuy_Api.Database.Entities.System.User>().AsQueryable()
+                                      .Where(name => name.Id == order.UserId)
+                                      .Select(name => name.FirstName)
+                                      .FirstOrDefault(),
+                Description = order.Description,
+                Quantity = order.Quantity,
+                PathImage = order.PathImage,
+                TotalAmount = order.TotalAmount,
+                OrderDate = order.OrderDate,
+                CreatedBy = order.CreatedBy,
+                CreatedAt = order.CreatedAt,
+                UpdatedAt = order.UpdatedAt,
+                IsActive = order.IsActive,
+            }).ToList();
+
+            return result;
         }
 
         public async Task<DataResult<int>> UpdateAsync(OrderQuery entity, string id)
@@ -187,6 +238,7 @@ namespace ClickBuy_Api.Service.Services.Orders
                           Id = x.Id,
                           Name = x.Name,
                           Code = x.Code,
+                          UserId = x.UserId.ToString(),
                           Description = x.Description,
                           CreatedBy = x.CreatedBy,
                           CreatedAt = x.CreatedAt,

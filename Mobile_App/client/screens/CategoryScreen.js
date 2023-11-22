@@ -11,11 +11,10 @@ const CategoryScreen = () => {
     const [categoryDishes, setCategoryDishes] = useState([]);
 
     useEffect(() => {
-        // Gọi API để lấy danh sách sản phẩm theo category ID từ `resturants`
         const fetchData = async () => {
             try {
                 // Thay thế link API thật của bạn
-                const response = await fetch(`https://7f72-14-191-242-235.ngrok-free.app/api/Category/${id}`);
+                const response = await fetch(`https://47d5-14-191-242-235.ngrok-free.app/api/Category/${id}`);
                 const data = await response.json();
                 setCategoryDishes(data.dishes);
             } catch (error) {

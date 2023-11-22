@@ -11,7 +11,6 @@ namespace ClickBuy_Api.Database.Configurations
             // default
             builder.HasKey(x => x.Id);
             #region Custom 
-            builder.HasOne(x => x.Order).WithMany(x => x.OrderDetails).HasForeignKey(x => x.OrderId).OnDelete(DeleteBehavior.Cascade);
 
             #endregion Custom
         }
